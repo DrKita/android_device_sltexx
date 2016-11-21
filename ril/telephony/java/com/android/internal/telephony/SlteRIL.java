@@ -29,8 +29,6 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
-import java.io.IOException;
-import java.lang.Runtime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -44,7 +42,7 @@ public class SlteRIL extends RIL {
     /**********************************************************
      * SAMSUNG REQUESTS
      **********************************************************/
-    static final boolean RILJ_LOGD = false;
+    static final boolean RILJ_LOGD = true;
     static final boolean RILJ_LOGV = false;
 
     private static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
@@ -460,19 +458,9 @@ public class SlteRIL extends RIL {
 
         switch (newResponse) {
             case RIL_UNSOL_AM:
-                String amString = (String)ret;
-
-                if (amString.startsWith("broadcast")) {
-                    Rlog.v(RILJ_LOG_TAG, "XMM7260: execute 'am " + amString + "'");
-
-                    /* TODO: Directly use AcitivityManager? */
-                    try {
-                        Runtime.getRuntime().exec("/system/bin/am " + amString);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Rlog.e(RILJ_LOG_TAG, "'am " + amString + "' could not be executed.");
-                    }
-                }
+                String strAm = (String)ret;
+                // Add debug to check if this wants to execute any useful am command
+                Rlog.v(RILJ_LOG_TAG, "XMM7260: am=" + strAm);
                 break;
         }
     }
